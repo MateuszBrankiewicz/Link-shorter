@@ -1,0 +1,26 @@
+#main{
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    width: 95%;
+    height: 60vh;
+    background-color:rgba(29, 27, 27, 0.151);
+    box-shadow:  rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#info{
+    display: block;
+    text-align: center;
+    margin-top:40px;
+    border-bottom: 0.1rem solid;
+    border-color:  rgba(0,0,0,0.466);
+    
+}
+#form{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto
+}
+h2, h3,p{
+    color: #B0b2b5;
+    text-align: center;
+}
