@@ -1,21 +1,19 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import "../styles/inputs.css"
 interface Props {
   msg: string;
   option: string;
+  inputValue: string;
+  onChange:(event : ChangeEvent<HTMLInputElement>) =>void;
 }
 
-const Input = ({ msg, option }: Props) => {
-  const [inputValue, setInputValue] = useState('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+const Input: React.FC<Props> = ({ msg, option,inputValue,onChange }: Props) => {
+  
 
   return (
     
       <form>
-        <input type={option} placeholder={msg} value={inputValue} onChange={handleInputChange} />
+        <input type={option} placeholder={msg} value={inputValue} onChange={onChange} />
       </form>
   
   );

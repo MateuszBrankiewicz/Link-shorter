@@ -1,25 +1,35 @@
-#registerbar{
+#registerbar {
     display: flex;
-    
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 250px;
-    height: 60vh;
-    background-color:rgba(29, 27, 27, 0.151);
-    box-shadow:  rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-}
-
-
-#form{
+    height: 80vh;
+    background-color: rgba(29, 27, 27, 0.151);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    transition: height 0.3s ease;
+  }
+  
+  #registerbar {
+    height: 70vh;
+  }
+  
+  #form {
     display: flex;
     flex-direction: column;
-    margin: 0 auto
-}
-h2, h3,p{
-    color: #B0b2b5;
+    margin: 0 auto;
+  }
+
+  h2,
+  h3,
+  p {
+    color: black;
     text-align: center;
-}
-@media screen and(min-width: 372px) {
-    #registerbar{
-        width: 300px;
+    font-size: smaller;
+  }
+  
+  @media screen and (min-width: 372px) {
+    #registerbar {
+      width: 350px;
     }
-}
+  }
