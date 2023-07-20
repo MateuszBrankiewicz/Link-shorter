@@ -5,9 +5,6 @@ input, button{
     background:rgba(0,0,0,0.466); 
     color: #B0b2b5;
     border: none;
-    
-    
-    
 }
 button:hover{
     background: white;
