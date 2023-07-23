@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from dotenv import load_dotenv
@@ -19,8 +19,9 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-db = psycopg2.connect(database="LinkShorter", user="postgres", password="Haslo123", host="localhost", port="5432")
 
+def get_db_connection():
+    return psycopg2.connect(database="LinkShorter", user="postgres", password="Haslo123", host="localhost", port="5432")
 class User(UserMixin):
     def __init__(self, id, email, username):
         self.id = id
@@ -40,17 +41,18 @@ def register():
     email = data["email"]
     password = data["password"]
     username = data["userName"]
-    with db:
+    with get_db_connection() as db:
         with db.cursor() as cursor:
             cursor.execute(CREATE_USERS_TABLE)
             cursor.execute(INSERT_USERS, (email,password,username))          
-    return {"message": f"Users {username} created."}, 201
+    return {"message": f"User {username} created."}, 201
+
 @app.post("/api/login")
 def login():
     data = request.get_json()
     email = data["email"]
     password = data["password"]
-    with db:
+    with get_db_connection() as db:
         with db.cursor() as cursor:
             cursor.execute(CHECK_USERS, (email, password))
             user = cursor.fetchone()  # Fetch the user data
@@ -61,19 +63,23 @@ def login():
                 return {"message": f"Logged in as {username}."}, 200
             else:
                 return {"message": "Invalid credentials."}, 401
+
 @app.route('/api/home', methods=['POST'])
 def getLinks():
     data = request.get_json()
     email = data["email"]
-    with db:
+    with get_db_connection() as db:
         with db.cursor() as cursor:
             cursor.execute(SELECT_LINKS, (email,))
             links = cursor.fetchone()  # Fetch the links data
             if links:
-                email, links_list = links
-                return {"email": email, "links": links_list}, 200
+                email, links_list, short_links_list = links
+               
+                print(links_list)
+                return {"email": email, "links": links_list, "short_links": short_links_list}, 200
             else:
                 return {"message": "No links found for the given email address."}, 404
+
 @app.route('/api/home/create', methods=["POST"])
 def createLink():
     data = request.get_json()
@@ -83,20 +89,20 @@ def createLink():
     if not email or not url:
         return jsonify({"error": "Email and URL must be provided."}), 400
 
-    with db:
+    with get_db_connection() as db:
         with db.cursor() as cursor:
             cursor.execute(SELECT_LINKS, (email,))
             links = cursor.fetchone()
 
         if links:
             email, existing_links, shorted_links = links
-            existing_links = existing_links.split(",")  # Convert the string to a list
-            shorted_links = shorted_links.split(",")    # Convert the string to a list
+            existing_links = existing_links.split(",")  
+            shorted_links = shorted_links.split(",")    
         else:
             existing_links = []
             shorted_links = []
 
-        existing_links.append(url)  # Add the new link to the existing links list
+        existing_links.append(url)  
 
         short_link = generate_short_link(url)
         shorted_links.append(short_link)
@@ -107,11 +113,27 @@ def createLink():
 
         with db.cursor() as cursor:
             cursor.execute(INSERT_LINK, (email, existing_links_str, shorted_links_str))
-    print(links)
-    return jsonify({"email": email, "links": existing_links}), 200
 
+    return jsonify({"email": email, "links": existing_links, "shorted_links": shorted_links}), 200
 
 def generate_short_link(url):
     md5_hash = hashlib.md5(url.encode()).hexdigest()[:8]  
-    short_link = f"http://urlxMatty522/{md5_hash}"  
+    short_link = f"http://localhost:5000/{md5_hash}"  
     return short_link
+
+@app.route("/<short_link>")
+def handle_redirect(short_link):
+    print("Przekierowuje")
+    short_link2 = "http://localhost:5000/"+short_link
+    print(short_link2)
+    with get_db_connection() as db:
+        with db.cursor() as cursor:
+            cursor.execute("SELECT link FROM links WHERE short_link = %s", (short_link2,))
+            result = cursor.fetchone()
+            print(result)
+            if result:
+                long_link = result[0]
+                print(long_link)
+                return redirect(long_link)
+            else:
+                return {"message": "Link not found."}, 404
