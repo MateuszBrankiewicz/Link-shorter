@@ -3,7 +3,7 @@ import Input from '../components/inputs';
 import Button from '../components/button';
 import Table from '../components/table';
 import { useLocation } from 'react-router-dom';
-
+import "../styles/home.css"
 interface ServerData {
   email: string;
   links: string[];
@@ -31,6 +31,7 @@ const Home = () => {
         email: email,
         url: url
       };
+      console.log(url)
       fetch("http://localhost:5000/api/home/create", {
         method: 'POST',
         headers: {
@@ -87,22 +88,29 @@ const Home = () => {
   const { email, password } = location.state;
 
   useEffect(() => {
-    
-    if (getData && getData.links && getData.shorted_links) {
-      const tableData = getData.links.map((link, index) => ({
-        url: link,
-        shortUrl: getData.shorted_links[index],
-      }));
-      setTableData(tableData);
-      console.log(tableData)
+    if (getData) {
+      // Sprawdź i zamknij w tablicy, jeśli nie jest tablicą
+      const linksArray = Array.isArray(getData.links) ? getData.links : [getData.links];
+      const shortedLinksArray = Array.isArray(getData.shorted_links) ? getData.shorted_links : [getData.shorted_links];
+
+      console.log(getData);
+      setTableData(
+        linksArray.map((link, index) => ({
+          url: link,
+          shortUrl: shortedLinksArray[index],
+        }))
+      );
+    } else {
+      setTableData([]);
     }
   }, [getData]);
 
  
 
   return (
-    <div>
-      <div>
+    <div id='main' >
+      <h2>Put links to short them</h2>
+      <div id='inputBar'>
         <Input
           msg='Enter a url'
           onChange={handleInputChange}
@@ -111,7 +119,8 @@ const Home = () => {
         />
         <Button onClick={createUrl} msg='Create url' />
       </div>
-      <div>
+      <h2>Results</h2>
+      <div id='table'>
       {tableData.length > 0 ? (
     <Table data={tableData} />
   ) : (

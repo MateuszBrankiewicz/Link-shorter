@@ -87,17 +87,19 @@ const RegisterPage = () => {
 
   return (
     <div id="registerbar">
-      <h3>Register</h3>
+      
       <div id="form">
+      <h3>Register</h3>
         <Input option="text" msg="Enter username" onChange={handleUsernameChange} inputValue={userName} />
-        <p>{errorMessage}</p>
+      
         <Input option="text" msg="Enter email" onChange={handleEmailChange} inputValue={email} />
-        <p>{errorMessage}</p>
+        
         <Input option="password" msg="Enter password" onChange={handlePasswordChange} inputValue={password} />
-        <p>{errorMessage}</p>
+        
         <Input option="password" msg="Repeat password" onChange={handleRepeatPasswordChange} inputValue={repeatPassword} />
-        <p>{errorMessage}</p>
+       
         <Button onClick={signUpFunction} msg={"Sign up"}></Button>
+        <p>{errorMessage}</p>
       </div>
     </div>
   );

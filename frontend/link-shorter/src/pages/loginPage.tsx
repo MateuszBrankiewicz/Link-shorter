@@ -60,10 +60,11 @@ const LoginPage = () =>{
             <div id="form">
                 <h3>Log In </h3>
                 <Input inputValue={email} onChange={handleEmailChange} option="text" msg = "Enter email"  ></Input>
-                <p>{errorMessage}</p>
+               
                 <Input inputValue={password} onChange={handlePasswordChange} option="password" msg="Enter password"></Input>
-                <p>{errorMessage}</p>
+                
                 <Button onClick={signIn} msg={"Sign in"}></Button>
+                <p>{errorMessage}</p>
                 <p>Don't have account? <Link to = "/register">Register now</Link></p>
             </div>
         </div>

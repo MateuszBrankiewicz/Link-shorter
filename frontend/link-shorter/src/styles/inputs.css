@@ -1,10 +1,11 @@
 input, button{
-    width: 100%;
+    width: 95%;
     height: 45px;
     border-radius: 1rem;
     background:rgba(0,0,0,0.466); 
     color: #B0b2b5;
     border: none;
+    margin-top: 15px;
 }
 button:hover{
     background: white;

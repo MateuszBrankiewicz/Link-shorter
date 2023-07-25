@@ -1,6 +1,6 @@
 // components/table.tsx
 import React from 'react';
-
+import '../styles/table.css'
 interface TableProps {
   data: { url: string; shortUrl: string }[];
   // Dodaj nowy prop dataKey
